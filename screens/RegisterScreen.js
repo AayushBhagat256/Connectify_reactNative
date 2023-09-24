@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 
 const RegisterScreen = () => {
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("")
@@ -50,6 +51,23 @@ const RegisterScreen = () => {
           </View>
           <View style={{ marginTop: 50 }}>
             <View>
+              <Text style={{ color: colors.LIGHT, fontSize: 18, fontWeight: "600" }}>Username</Text>
+              <TextInput
+                value={name}
+                onChangeText={(text) => setName(text)}
+                keyboardType='default'
+                style={{
+                  fontSize: 18,
+                  padding: 3,
+                  borderBottomColor: "gray",
+                  borderBottomWidth: 1,
+                  marginVertical: 10,
+                  color: 'white',
+                  width: 300,
+                }}
+                placeholderTextColor={colors.SEMI} placeholder='Enter your username' />
+            </View>
+            <View style={{ marginTop: 10 }}>
               <Text style={{ color: colors.LIGHT, fontSize: 18, fontWeight: "600" }}>Email</Text>
               <TextInput
                 value={email}
