@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 
+// expo start --tunnel use this to make apis work
+
 const RegisterScreen = () => {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("");
@@ -73,15 +75,15 @@ const RegisterScreen = () => {
     // })
     // const axios = require('axios');
     let data = JSON.stringify({
-      "name": "admin",
-      "password": "pass123",
-      "email": "admin@test.com"
+      "name": name,
+      "password": confirm,
+      "email": email
     });
 
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'http://localhost:3000/signup',
+      url: 'http://192.168.29.22:3000/signup',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -91,6 +93,14 @@ const RegisterScreen = () => {
     axios.request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
+        Alert.alert(
+          "Registered success",
+          "You have been added"
+        )
+        setConfirm('')
+        setPassword('')
+        setName('')
+        setEmail('')
       })
       .catch((error) => {
         console.log(error);
