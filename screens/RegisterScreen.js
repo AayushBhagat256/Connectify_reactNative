@@ -1,10 +1,11 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, View, TouchableOpacity, Pressable, Button, Image, ScrollView } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, View, TouchableOpacity, Pressable, Button, Image, ScrollView, Alert } from 'react-native'
 import React, { useState, useEffect } from "react";
 import InputField from '../components/InputField'
 import colors from '../components/colors';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
 
 const RegisterScreen = () => {
   const [name, setName] = useState("")
@@ -39,7 +40,66 @@ const RegisterScreen = () => {
     }
   };
 
+  const handleRegister = () => {
+    // const user = {
+    //   name : name,
+    //   email : email,
+    //   password : confirm
+    // }
+
+    // axios.post("http://localhost:3000/signup/",user).then((response)=>{
+    //   console.log(response.data)
+    //   Alert.alert(
+    //     "Registered success",
+    //     "You have been added"
+    //   )
+    //   setConfirm('')
+    //   setPassword('')
+    //   setName('')
+    //   setEmail('')
+    // }).catch((error)=>{
+    //   console.log('Error occured ',error)
+    //   if (error.response) {
+    //     // The server responded with an error status code (e.g., 4xx or 5xx)
+    //     console.log("Server Error:", error.response.data);
+    //     console.log("Status Code:", error.response.status);
+    //   } else if (error.request) {
+    //     // The request was made, but no response was received
+    //     console.log("No response received. Check your server.");
+    //   } else {
+    //     // Something happened while setting up the request
+    //     console.log("Error:", error.message);
+    //   }
+    // })
+    // const axios = require('axios');
+    let data = JSON.stringify({
+      "name": "admin",
+      "password": "pass123",
+      "email": "admin@test.com"
+    });
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'http://localhost:3000/signup',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data
+    };
+
+    axios.request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+  }
+
   console.log(selectedImage)
+  console.log(name)
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={{ flex: 1, backgroundColor: colors.DARK, padding: 10, alignItems: 'center', }}>
@@ -149,7 +209,7 @@ const RegisterScreen = () => {
             </View>
           </View>
         </KeyboardAvoidingView>
-        <TouchableOpacity style={styles.button} >
+        <TouchableOpacity onPress={handleRegister} style={styles.button} >
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
 
