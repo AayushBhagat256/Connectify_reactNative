@@ -49,48 +49,63 @@ const RegisterScreen = () => {
     console.log("Registered triggered");
 
     const formData = new FormData();
-    formData.append('image', {
-      uri: selectedImage,
-      type: 'image/jpg', // Adjust the image type as needed
-      name: fileName,
-    });
     formData.append('name', name);
     formData.append('email', email);
     formData.append('password', confirm);
 
-    axios
-      .post('http://192.168.29.22:3000/signup', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Set the content type to form data
-        },
-      })
-      .then((response) => {
-        console.log('Response:', response.data);
-        if (response.status === 200) {
-          Alert.alert(
-            'Registered success',
-            'You have been added In ! login to proceed'
-          );
-          setConfirm('');
-          setPassword('');
-          setName('');
-          setEmail('');
-        } else {
-          console.log('Unexpected response status:', response.status);
-        }
-      })
-      .catch((error) => {
-        console.log('Error:', error);
-        if (error.response) {
-          console.log('Server Error:', error.response.data);
-          console.log('Status Code:', error.response.status);
-        } else if (error.request) {
-          console.log('No response received. Check your server.');
-        } else {
-          console.log('Error:', error.message);
-        }
+    // Determine the image type based on the file extension
+    const filePath = selectedImage;
+    const parts = filePath.split('/');
+    const fileName = parts[parts.length - 1];
+    const imageType = selectedImage.split('.').pop().toLowerCase();
+    const allowedImageTypes = ['jpg', 'jpeg', 'png']; // Add more as needed
+    console.log(imageType)
+
+    if (allowedImageTypes.includes(imageType)) {
+      formData.append('image', {
+        uri: selectedImage,
+        type: `image/${imageType}`,
+        name: fileName,
       });
+
+      axios
+        .post('http://192.168.29.22:3000/signup', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((response) => {
+          console.log('Response:', response.data);
+          if (response.status === 200) {
+            Alert.alert(
+              'Registered success',
+              'You have been added'
+            );
+            setConfirm('');
+            setPassword('');
+            setName('');
+            setEmail('');
+          } else {
+            console.log('Unexpected response status:', response.status);
+          }
+        })
+        .catch((error) => {
+          console.log('Error:', error);
+          if (error.response) {
+            console.log('Server Error:', error.response.data);
+            console.log('Status Code:', error.response.status);
+          } else if (error.request) {
+            console.log('No response received. Check your server.');
+          } else {
+            console.log('Error:', error.message);
+          }
+        });
+    } else {
+      console.log('Unsupported image type:', imageType);
+      // Handle unsupported image type here
+    }
   };
+
 
 
   console.log(selectedImage)
