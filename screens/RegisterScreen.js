@@ -10,10 +10,10 @@ import axios from 'axios';
 // expo start --tunnel use this to make apis work
 
 const RegisterScreen = () => {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("")
+  const [name, setName] = useState(null)
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [confirm, setConfirm] = useState(null)
   const [showPassword, setShowPassword] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const navigation = useNavigation()
@@ -43,6 +43,7 @@ const RegisterScreen = () => {
   };
 
   const handleRegister = () => {
+    console.log("Registered triggred")
     // const user = {
     //   name : name,
     //   email : email,
@@ -228,7 +229,7 @@ const RegisterScreen = () => {
           style={{ marginTop: 15 }}
         >
           <Text style={{ textAlign: "center", color: "gray", fontSize: 16 }}>
-            Already have an account? Sign In
+            Already have an account ? Sign In
           </Text>
         </Pressable>
 
