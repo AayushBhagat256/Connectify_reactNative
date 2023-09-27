@@ -16,6 +16,7 @@ const RegisterScreen = () => {
   const [confirm, setConfirm] = useState(null)
   const [showPassword, setShowPassword] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
+  const [fileName, setFileName] = useState('profilepic.jpg')
   const navigation = useNavigation()
 
   const togglePasswordVisibility = () => {
@@ -31,8 +32,10 @@ const RegisterScreen = () => {
         // setSelectedImage(result.assets.uri);
         console.log(result.assets.uri)
         result.assets.forEach((item) => {
+          console.log(item)
           console.log("URI: ", item.uri)
           setSelectedImage(item.uri)
+          setFileName(item.fileName)
         })
       } else {
         console.log('User cancelled image picker');
@@ -43,71 +46,52 @@ const RegisterScreen = () => {
   };
 
   const handleRegister = () => {
-    console.log("Registered triggred")
-    // const user = {
-    //   name : name,
-    //   email : email,
-    //   password : confirm
-    // }
+    console.log("Registered triggered");
 
-    // axios.post("http://localhost:3000/signup/",user).then((response)=>{
-    //   console.log(response.data)
-    //   Alert.alert(
-    //     "Registered success",
-    //     "You have been added"
-    //   )
-    //   setConfirm('')
-    //   setPassword('')
-    //   setName('')
-    //   setEmail('')
-    // }).catch((error)=>{
-    //   console.log('Error occured ',error)
-    //   if (error.response) {
-    //     // The server responded with an error status code (e.g., 4xx or 5xx)
-    //     console.log("Server Error:", error.response.data);
-    //     console.log("Status Code:", error.response.status);
-    //   } else if (error.request) {
-    //     // The request was made, but no response was received
-    //     console.log("No response received. Check your server.");
-    //   } else {
-    //     // Something happened while setting up the request
-    //     console.log("Error:", error.message);
-    //   }
-    // })
-    // const axios = require('axios');
-    let data = JSON.stringify({
-      "name": name,
-      "password": confirm,
-      "email": email
+    const formData = new FormData();
+    formData.append('image', {
+      uri: selectedImage,
+      type: 'image/jpg', // Adjust the image type as needed
+      name: fileName,
     });
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('password', confirm);
 
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: 'http://192.168.29.22:3000/signup',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      data: data
-    };
-
-    axios.request(config)
+    axios
+      .post('http://192.168.29.22:3000/signup', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Set the content type to form data
+        },
+      })
       .then((response) => {
-        console.log(JSON.stringify(response.data));
-        Alert.alert(
-          "Registered success",
-          "You have been added"
-        )
-        setConfirm('')
-        setPassword('')
-        setName('')
-        setEmail('')
+        console.log('Response:', response.data);
+        if (response.status === 200) {
+          Alert.alert(
+            'Registered success',
+            'You have been added In ! login to proceed'
+          );
+          setConfirm('');
+          setPassword('');
+          setName('');
+          setEmail('');
+        } else {
+          console.log('Unexpected response status:', response.status);
+        }
       })
       .catch((error) => {
-        console.log(error);
+        console.log('Error:', error);
+        if (error.response) {
+          console.log('Server Error:', error.response.data);
+          console.log('Status Code:', error.response.status);
+        } else if (error.request) {
+          console.log('No response received. Check your server.');
+        } else {
+          console.log('Error:', error.message);
+        }
       });
+  };
 
-  }
 
   console.log(selectedImage)
   console.log(name)

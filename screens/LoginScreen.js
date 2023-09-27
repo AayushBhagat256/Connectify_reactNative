@@ -39,8 +39,8 @@ const LoginScreen = () => {
     )
 
     const handleLogin = () => {
-        // console.log("login Triggered")
-        navigation.replace("Home")
+        console.log("login Triggered")
+        // navigation.replace("Home")
         let data = JSON.stringify({
             // "password": "pass123",
             "password": password,
