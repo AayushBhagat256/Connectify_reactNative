@@ -68,21 +68,12 @@ const HomeScreen = () => {
 
     console.log("users", users)
     return (
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <View style={styles.home}>
-                {/* <Pressable onPress={()=>AsyncStorage.clear()}><Text>Logout</Text></Pressable> */}
-                <User />
-                {/* {
-                    users.map((item,index)=>{
-
-                    })
-                } */}
+        <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: colors.DARK }}>
+            <View style={{ padding: 10 }}>
+                {users.map((item, index) => (
+                    <User key={index} item={item} />
+                ))}
             </View>
-            {/* <Tab.Navigator>
-                <Tab.Screen name="signup" component={RegisterScreen} options={{ headerShown: false }} />
-                <Tab.Screen name="profile" component={UserProfile} options={{ headerShown: false }} />
-                <Tab.Screen name="chat" component={ChatScreen} options={{ headerShown: false }} />
-            </Tab.Navigator> */}
         </ScrollView>
     )
 }
@@ -91,9 +82,9 @@ export default HomeScreen
 
 const styles = StyleSheet.create({
     home: {
-        flex: 1,
+        // flex: 1,
         backgroundColor: colors.DARK,
         padding: 10,
-        alignItems: 'center',
+        // alignItems: 'center',
     }
 })
