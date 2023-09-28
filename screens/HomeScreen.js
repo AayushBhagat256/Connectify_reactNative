@@ -1,5 +1,5 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react'
 import colors from '../components/colors'
 import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons';
@@ -10,11 +10,17 @@ import RegisterScreen from './RegisterScreen';
 import UserProfile from './UserProfile';
 import ChatScreen from './ChatScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserType } from '../context/userContext';
+import jwtDecode from 'jwt-decode';
+import axios from 'axios';
+import User from '../components/User';
 
 const Tab = createBottomTabNavigator();
 
 const HomeScreen = () => {
     const navigation = useNavigation()
+    const { userId, setUserId } = useContext(UserType)
+    const [users, setusers] = useState([])
     useLayoutEffect(
         () => {
             navigation.setOptions({
@@ -38,11 +44,39 @@ const HomeScreen = () => {
             })
         }, []
     )
+    useEffect(
+        () => {
+            const fetchUsers = async () => {
+                const token = await AsyncStorage.getItem("AuthToken")
+                const decodedToken = jwtDecode(token)
+                const userId = decodedToken.userId
+                setUserId(userId)
+
+                axios.get(`http://192.168.29.22:3000/users/${userId}`).then(
+                    (response) => {
+                        console.log(response.data)
+                        setusers(response.data)
+                        Alert.alert("Api called success")
+                    }
+                ).catch((error) => {
+                    console.log(error)
+                })
+            }
+            fetchUsers()
+        }, []
+    )
+
+    console.log("users", users)
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <View style={styles.home}>
-                <Text>HomeScreen</Text>
                 {/* <Pressable onPress={()=>AsyncStorage.clear()}><Text>Logout</Text></Pressable> */}
+                <User />
+                {/* {
+                    users.map((item,index)=>{
+
+                    })
+                } */}
             </View>
             {/* <Tab.Navigator>
                 <Tab.Screen name="signup" component={RegisterScreen} options={{ headerShown: false }} />
