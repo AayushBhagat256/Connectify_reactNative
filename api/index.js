@@ -148,3 +148,45 @@ app.get("/users/:userId", (req, res) => {
       res.status(500).json({ message: "Error retrieving users" });
     });
 });
+
+//endpoint to send a request to a user
+app.post("/friend-request", async (req, res) => {
+  const { currentUserId, selectedUserId } = req.body;
+
+  try {
+    // Update the recipient's friendRequests array (person receiving the request)
+    await User.findByIdAndUpdate(selectedUserId, {
+      $push: { friendRequests: currentUserId },
+    });
+
+    // Update the sender's sentFriendRequests array
+    await User.findByIdAndUpdate(currentUserId, {
+      $push: { sentFriendRequest: selectedUserId },
+    });
+
+    console.log("Friend request sent successfully.");
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Error sending friend request:", error);
+    res.sendStatus(500);
+  }
+});
+
+// endpoint to see all friendrequest of a particular user
+app.get('/friend-req/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId).populate("friendRequests", "name email image").lean();
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const friendRequest = user.friendRequests;
+    res.status(200).json(friendRequest);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Error retrieving friend requests" });
+  }
+});

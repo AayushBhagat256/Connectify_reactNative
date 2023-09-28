@@ -1,4 +1,4 @@
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react'
 import colors from '../components/colors'
 import { useNavigation } from '@react-navigation/native'
@@ -35,9 +35,9 @@ const HomeScreen = () => {
                 },
                 headerRight: () => {
                     return (
-                        <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
                             <Ionicons name="ios-chatbubbles-outline" size={24} color='#DDE6ED' />
-                            <Feather name="users" size={24} color="#DDE6ED" />
+                            <TouchableOpacity onPress={() => navigation.navigate('Friends')}><Feather name="users" size={24} color="#DDE6ED" /></TouchableOpacity>
                         </View>
                     )
                 }
