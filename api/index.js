@@ -190,3 +190,33 @@ app.get('/friend-req/:userId', async (req, res) => {
     res.status(500).json({ message: "Error retrieving friend requests" });
   }
 });
+
+//endpoint to accept a friend-request of a particular person
+app.post("/friend-request/accept", async (req, res) => {
+  try {
+    const { senderId, recepientId } = req.body;
+
+    //retrieve the documents of sender and the recipient
+    const sender = await User.findById(senderId);
+    const recepient = await User.findById(recepientId);
+
+    sender.friends.push(recepientId);
+    recepient.friends.push(senderId);
+
+    recepient.friendRequests = recepient.friendRequests.filter(
+      (request) => request.toString() !== senderId.toString()
+    );
+
+    sender.sentFriendRequest = sender.sentFriendRequest.filter(
+      (request) => request.toString() !== recepientId.toString
+    );
+
+    await sender.save();
+    await recepient.save();
+
+    res.status(200).json({ message: "Friend Request accepted successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
