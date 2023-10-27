@@ -1,13 +1,45 @@
 import { Pressable, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import colors from './colors';
+import { useContext } from 'react';
+import { UserType } from '../context/userContext';
+import { useNavigation } from '@react-navigation/native';
 
 const FriendReq = ({ item, friendReq, setFriendReq }) => {
+    const { userId, setUserId } = useContext(UserType)
+    const navigation = useNavigation()
     // Define a fallback image source URL
     const fallbackImageSource =
         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png';
 
     const k = 'http://192.168.29.22:3000/';
+
+    const acceptRequest = async (friendRequestId) => {
+        try {
+            const response = await fetch(
+                "http://192.168.29.22:3000/friend-request/accept",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        senderId: friendRequestId,
+                        recepientId: "65142bf331bf4da8498b7db6",
+                        // recepientId: userId,
+                    }),
+                }
+            );
+            if (response.ok) {
+                setFriendReq(
+                    friendReq.filter((request) => request._id !== friendRequestId)
+                );
+                navigation.navigate("Chats");
+            }
+        } catch (err) {
+            console.log("error acceptin the friend request", err);
+        }
+    };
 
 
     // Check if item.image exists and is not undefined
@@ -45,7 +77,7 @@ const FriendReq = ({ item, friendReq, setFriendReq }) => {
                 </View>
 
                 <TouchableOpacity
-                    //   onPress={() => sendFreindRequest(userId, item._id)}
+                    onPress={() => acceptRequest(item._id)}
                     style={{
                         padding: 10,
                         borderRadius: 6,
@@ -83,7 +115,7 @@ const FriendReq = ({ item, friendReq, setFriendReq }) => {
                 </View>
 
                 <TouchableOpacity
-                    //   onPress={() => sendFreindRequest(userId, item._id)}
+                    onPress={() => acceptRequest(item._id)}
                     style={{
                         padding: 10,
                         borderRadius: 6,

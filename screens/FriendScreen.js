@@ -26,8 +26,8 @@ const FriendScreen = () => {
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
-            // url: `http://192.168.29.22:3000/friend-req/${userId}`,
-            url: `http://192.168.29.22:3000/friend-req/65142bf331bf4da8498b7db6`,
+            // url: `http://192.168.29.22:3000/friend-req/${userId}`, //admin logged in
+            url: `http://192.168.29.22:3000/friend-req/65142bf331bf4da8498b7db6`, //bruce id
             headers: {}
         };
 

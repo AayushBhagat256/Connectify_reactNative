@@ -36,7 +36,7 @@ const HomeScreen = () => {
                 headerRight: () => {
                     return (
                         <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                            <Ionicons name="ios-chatbubbles-outline" size={24} color='#DDE6ED' />
+                            <TouchableOpacity onPress={() => navigation.navigate('Chats')}><Ionicons name="ios-chatbubbles-outline" size={24} color='#DDE6ED' /></TouchableOpacity>
                             <TouchableOpacity onPress={() => navigation.navigate('Friends')}><Feather name="users" size={24} color="#DDE6ED" /></TouchableOpacity>
                         </View>
                     )

@@ -6,18 +6,21 @@ import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen'
 import HomeScreen from './screens/HomeScreen'
 import FriendScreen from './screens/FriendScreen'
+import ChatScreen from './screens/ChatScreen'
 
 const Stack = createNativeStackNavigator()
 
 const StackNavigator = () => {
   return (
     <NavigationContainer>
-        <Stack.Navigator>
-            <Stack.Screen name='login' component={LoginScreen} options={{headerShown:false}}/>
-            <Stack.Screen name='Register' component={RegisterScreen} options={{headerShown:false}}/>
-            <Stack.Screen name='Home' component={HomeScreen} />
-            <Stack.Screen name='Friends' component={FriendScreen} />
-        </Stack.Navigator>
+      <Stack.Navigator>
+        <Stack.Screen name='login' component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false }} />
+        <Stack.Screen name='Home' component={HomeScreen} />
+        <Stack.Screen name='Friends' component={FriendScreen} />
+        <Stack.Screen name="Chats" component={ChatScreen} />
+
+      </Stack.Navigator>
     </NavigationContainer>
   )
 }
